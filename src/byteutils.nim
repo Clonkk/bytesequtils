@@ -51,13 +51,14 @@ template asByteSeq*(buf: var string, body) =
     body
     buf = toString(data)
 
-## Immutable version
-## Immutable version can only works with either a copy or unsafeAddr
+## Immutable version can only works with copy
+## Using move here would break immutability for asString / asByteSeq
 
-## Don't export these ones yet as it would break immutability
-template toString(buf: seq[byte]): string = move(cast[ptr string](buf.unsafeAddr)[])
-template toByteSeq(data: string):  seq[byte] = move(cast[ptr seq[byte]](data.unsafeAddr)[])
+## Don't export conversion as it copy data => User owuld end up with 2 different buffer and it's not the goal
+template toString(buf: seq[byte]): string = (cast[ptr string](buf.unsafeAddr)[])
+template toByteSeq(data: string):  seq[byte] = (cast[ptr seq[byte]](data.unsafeAddr)[])
 
+## No need for reassignment since data can't change
 template asString*(buf: seq[byte], body) =
   block:
     let data {.inject.} = toString(buf)

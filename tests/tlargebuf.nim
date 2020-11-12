@@ -28,13 +28,10 @@ suite "largestr":
 
   test "toByteSeq":
     var buf = initLargeString()
-
     time_it("toByteSeq"):
       var byteseq = toByteSeq(buf)
       byteseq[0] = 65
       byteseq[1344] = 66
-
-    # Immutable variable do not get modified
     check buf.len == 0
 
   test "asByteSeq":
@@ -43,9 +40,14 @@ suite "largestr":
       largestr.asByteSeq:
         data[0] = 65
         data[1344] = 66
-
     check largestr[0] == 'A'
     check largestr[1344] == 'B'
+
+  test "asByteSeq(immutable)":
+    let largestr = initLargeString()
+    time_it("asByteSeq"):
+      largestr.asByteSeq:
+        check data.len == LARGE_BYTE_SIZE
 
 suite "largeseq":
   proc initLargeSeq(): seq[byte] =
@@ -53,6 +55,14 @@ suite "largeseq":
     let refByte = mapLiterals(@[0xAB, 0xBC, 0xCD, 0xDE, 0xEF], byte)
     for i in 0..<len(result):
       result[i] = refByte[i mod refByte.len]
+
+  test "toString":
+    var buf = initLargeSeq()
+    time_it("toString"):
+      var str = toString(buf)
+      str[0] = 'A'
+      str[1344] = 'B'
+    check buf.len == 0
 
   test "asString":
     var largeseq = initLargeSeq()
@@ -64,13 +74,10 @@ suite "largeseq":
     check largeseq[0] == 65
     check largeseq[1344] == 66
 
-  test "toString":
-    var buf = initLargeSeq()
-    time_it("toString"):
-      var str = toString(buf)
-      str[0] = 'A'
-      str[1344] = 'B'
+  test "asString(immutable)":
+    let largeseq = initLargeSeq()
+    time_it("asString"):
+      largeseq.asString:
+        check data.len == LARGE_BYTE_SIZE
 
-    # Immutable variable do not get modified
-    check buf.len == 0
 
