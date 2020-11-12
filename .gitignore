@@ -1,2 +1,8 @@
 nimcache/
 testresults/
+bin/
+
+tlargebuf
+tmutable
+timmutable
+trejects
