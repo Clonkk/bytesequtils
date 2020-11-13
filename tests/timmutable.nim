@@ -7,10 +7,10 @@ import sequtils
 import bytesequtils
 
 suite "Immutable":
-  test "asString":
+  test "asStrBuf":
     let localbuf: seq[byte] = mapLiterals((48..57).toSeq, uint8)
     let origlen = localbuf.len
-    localbuf.asString:
+    localbuf.asStrBuf:
       check data == "0123456789"
       check data.len == origlen
     check localbuf == mapLiterals((48..57).toSeq, uint8)

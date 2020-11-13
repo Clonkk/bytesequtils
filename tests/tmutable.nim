@@ -7,10 +7,10 @@ import sequtils
 import bytesequtils
 
 suite "Mutable":
-  test "toString ":
+  test "toStrBuf ":
     var localbuf = mapLiterals(@[66, 111, 98, 64, 109, 97, 105, 108, 46, 99, 111, 109], uint8)
     let origlen = localbuf.len
-    var str = toString(localbuf)
+    var str = toStrBuf(localbuf)
     check str == "Bob@mail.com"
     check str.len == origlen
     check localbuf.len == 0
@@ -27,10 +27,10 @@ suite "Mutable":
     check buf.len == origlen
     check localstr.len == 0
 
-  test "asString":
+  test "asStrBuf":
     var localbuf: seq[byte] = mapLiterals((48..57).toSeq, uint8)
     let origlen = localbuf.len
-    localbuf.asString:
+    localbuf.asStrBuf:
       check data == "0123456789"
       data[0] = 'a'
       data[1] = 'b'
