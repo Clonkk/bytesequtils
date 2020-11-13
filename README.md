@@ -1,16 +1,13 @@
 # byteutils
 
-Some utility function to manipulate buffers as string or seq[byte]
+A coolections of ``template`` and ``proc`` to make it easier to work with buffer storing data in either ``string`` or ``seq[byte]``
 
-## toByteSeq
+## Conversion by moving memory
 
-Convert ``seq[byte]`` into ``string`` by ``move``. If the original data is immutable a copy will be made (and performance will drop).
+The goal is to obtains a ``string``representation of ``seq[byte]`` without copy.
+To accomplish that, it is necessary to ``move`` memory.
+Since ``move``operation can only be done on mutable memory, immutable data will be copied and thus, will be much slower.
 
-## toString
+## Detailed documentaton
 
-Convert ``string`` into ``seq[byte]`` by ``move``. If the original data is immutable a copy will be made (and performance will drop).
-
-## asString, asByteSeq template
-
-Move memory inside an injected variable ``data`` and back into the original variable. Can only be used on mutable variable.
-
+Read the documentation at https://clonkk.github.io/byteutils/.
