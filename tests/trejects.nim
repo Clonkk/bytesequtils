@@ -6,10 +6,10 @@ import sequtils
 import bytesequtils
 
 suite "Rejected":
-  test "toString":
+  test "toStrBuf":
     when defined(testing):
       let localbuf = mapLiterals(@[66, 111, 98, 64, 109, 97, 105, 108, 46, 99, 111, 109], uint8)
-      var str = toString(localbuf)
+      var str = toStrBuf(localbuf)
       check str == "Bob@mail.com"
       check localbuf.len == 0
     else:

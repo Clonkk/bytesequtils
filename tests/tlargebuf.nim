@@ -25,28 +25,28 @@ suite "largeseq":
     for i in 0..<len(result):
       result[i] = refByte[i mod refByte.len]
 
-  test "toString":
+  test "toStrBuf":
     var buf = initLargeSeq()
-    time_it("toString"):
-      var str = toString(buf)
+    time_it("toStrBuf"):
+      var str = toStrBuf(buf)
       str[0] = 'A'
       str[1344] = 'B'
     check buf.len == 0
 
-  test "asString":
+  test "asStrBuf":
     var largeseq = initLargeSeq()
-    time_it("asString"):
-      largeseq.asString:
+    time_it("asStrBuf"):
+      largeseq.asStrBuf:
         data[0] = 'A'
         data[1344] = 'B'
 
     check largeseq[0] == 65
     check largeseq[1344] == 66
 
-  test "asString(immutable)":
+  test "asStrBuf(immutable)":
     let largeseq = initLargeSeq()
-    time_it("asString (immutable)"):
-      largeseq.asString:
+    time_it("asStrBuf (immutable)"):
+      largeseq.asStrBuf:
         check data.len == LARGE_BYTE_SIZE
 
 suite "largestr":

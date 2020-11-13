@@ -6,10 +6,10 @@ import unittest
 import bytesequtils
 
 suite "Empty":
-  test "asString":
+  test "asStrBuf":
     var localbuf: seq[byte]
     check localbuf == newSeqUninitialized[uint8](0)
-    localbuf.asString:
+    localbuf.asStrBuf:
       check data == ""
 
   test "asByteSeq":
@@ -18,10 +18,10 @@ suite "Empty":
     localstr.asByteSeq:
       check data == newSeqUninitialized[uint8](0)
 
-  test "toString ":
+  test "toStrBuf ":
     var localbuf: seq[byte]
     check localbuf == newSeqUninitialized[uint8](0)
-    var str = toString(localbuf)
+    var str = toStrBuf(localbuf)
     check str == ""
 
   test "toByteSeq":
