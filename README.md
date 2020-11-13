@@ -1,6 +1,8 @@
 # byteutils
 
-A coolections of ``template`` and ``proc`` to make it easier to work with buffer storing data in either ``string`` or ``seq[byte]``
+A collections of ``template`` and ``proc`` to make it easier to work with buffer storing data in either ``string`` or ``seq[byte]``
+
+Note that it doesn't support ``openArray[byte]`` for now.
 
 ## Conversion by moving memory
 

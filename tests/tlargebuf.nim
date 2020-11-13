@@ -45,7 +45,7 @@ suite "largeseq":
 
   test "asString(immutable)":
     let largeseq = initLargeSeq()
-    time_it("asString"):
+    time_it("asString (immutable)"):
       largeseq.asString:
         check data.len == LARGE_BYTE_SIZE
 
@@ -76,7 +76,7 @@ suite "largestr":
 
   test "asByteArray(immutable)":
     let largestr = initLargeString()
-    time_it("asByteArray"):
+    time_it("asByteArray (immutable)"):
       largestr.asByteArray:
         check data.len == LARGE_BYTE_SIZE
 
