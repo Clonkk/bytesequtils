@@ -4,7 +4,7 @@ discard """
 """
 import unittest
 import sequtils
-import byteutils
+import bytesequtils
 
 suite "Immutable":
   test "asString":
@@ -15,10 +15,10 @@ suite "Immutable":
       check data.len == origlen
     check localbuf == mapLiterals((48..57).toSeq, uint8)
 
-  test "asByteArray":
+  test "asByteSeq":
     let localstr = "abcdefghijklm"
     let origlen = localstr.len
-    localstr.asByteArray:
+    localstr.asByteSeq:
       check data == mapLiterals((97..109).toSeq, uint8)
       check data.len == origlen
     check localstr == "abcdefghijklm"

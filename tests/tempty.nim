@@ -3,7 +3,7 @@ discard """
   exitcode: 0
 """
 import unittest
-import byteutils
+import bytesequtils
 
 suite "Empty":
   test "asString":
@@ -12,10 +12,10 @@ suite "Empty":
     localbuf.asString:
       check data == ""
 
-  test "asByteArray":
+  test "asByteSeq":
     var localstr: string
     check localstr == ""
-    localstr.asByteArray:
+    localstr.asByteSeq:
       check data == newSeqUninitialized[uint8](0)
 
   test "toString ":
@@ -24,9 +24,9 @@ suite "Empty":
     var str = toString(localbuf)
     check str == ""
 
-  test "toByteArray":
+  test "toByteSeq":
     var localstr: string
     check localstr == ""
-    var buf = toByteArray(localstr)
+    var buf = toByteSeq(localstr)
     check buf == newSeqUninitialized[uint8](0)
 

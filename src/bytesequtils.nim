@@ -1,10 +1,10 @@
 # import macros
 
-# macro asByteArray(buf, body): untyped =
+# macro asByteSeq(buf, body): untyped =
 #   var tree = newStmtList()
 #   let varName = ident(buf.toStrLit.strVal & "_data")
 #   tree.add quote do:
-#     var `varName` {.inject.} = (toByteArray(`buf`))
+#     var `varName` {.inject.} = (toByteSeq(`buf`))
 #     `body`
 #     `buf` = (toString(`varName`))
 #   result = newBlockStmt(tree)
@@ -16,16 +16,16 @@
 #   tree.add quote do:
 #     var `varName` {.inject.} = (toString(`buf`))
 #     `body`
-#     `buf` = (toByteArray(`varName`))
+#     `buf` = (toByteSeq(`varName`))
 #   result = newBlockStmt(tree)
 #   # echo result.repr
 
 ## A collections of ``template`` and ``proc`` to work with binary data stored in either ``string`` or ``seq[byte]`` buffer.
 
 # Immutable version can only works with copy
-# Using move here would break immutability for asString / asByteArray
+# Using move here would break immutability for asString / asByteSeq
 # Don't export conversion as it copy data => User would end up with 2 different buffer and it's not the goal
-func toByteArray(str: string): seq[byte] {.inline.} =
+func toByteSeq(str: string): seq[byte] {.inline.} =
   ## Copy ``string`` memory into an immutable``seq[byte]``.
   let length = str.len
   if length > 0:
@@ -55,7 +55,7 @@ proc toString*(bytes: var seq[byte]): string {.inline.} =
   if bytes.len > 0:
     result = move(cast[ptr string](bytes.addr)[])
 
-proc toByteArray*(str: var string): seq[byte] {.inline.} =
+proc toByteSeq*(str: var string): seq[byte] {.inline.} =
   ## Move memory from a mutable ``string`` into a ``seq[byte]``
   runnableExamples:
     # Create a buffer
@@ -63,7 +63,7 @@ proc toByteArray*(str: var string): seq[byte] {.inline.} =
     var strbuf = newString(buf_size)
     # insert data into buffer
     # Move data from the buffer into a string
-    var buffer = strbuf.toByteArray
+    var buffer = strbuf.toByteSeq
     doAssert strbuf.len == 0
     doAssert buffer.len == 10*1024
 
@@ -82,7 +82,7 @@ template asString*(bytes: var seq[byte], body) =
   block:
     var data {.inject.} = toString(bytes)
     body
-    bytes = toByteArray(data)
+    bytes = toByteSeq(data)
 
 # This template is tolerated on immutable because it does not break immutability
 template asString*(bytes: seq[byte], body) =
@@ -94,27 +94,27 @@ template asString*(bytes: seq[byte], body) =
     let data {.inject.} = toString(bytes)
     body
 
-template asByteArray*(str: var string, body) =
+template asByteSeq*(str: var string, body) =
   ## Inject a mutable seq[byte] ``data`` containing the string ``buf``
   runnableExamples:
     import sequtils
     var strBuffer = "abcdefghijklm"
-    strBuffer.asByteArray:
+    strBuffer.asByteSeq:
       # ASCII value of the characters stored in strBuffer
       doAssert data == mapLiterals((97..109).toSeq, uint8)
 
   block:
-    var data {.inject.} = toByteArray(str)
+    var data {.inject.} = toByteSeq(str)
     body
     str = toString(data)
 
 # This template is tolerated on immutable because it does not break immutability
-template asByteArray*(str: string, body) =
+template asByteSeq*(str: string, body) =
   ##[
-    ``asByteArray`` immutable ``template`` that uses ``copyMem`` instead of ``move``.
+    ``asByteSeq`` immutable ``template`` that uses ``copyMem`` instead of ``move``.
     It is slower, but doesn't break immutability.
   ]##
   block:
-    let data {.inject.} = toByteArray(str)
+    let data {.inject.} = toByteSeq(str)
     body
 

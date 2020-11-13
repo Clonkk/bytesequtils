@@ -7,7 +7,7 @@ import unittest
 import times
 import sequtils
 import strutils
-import byteutils
+import bytesequtils
 
 const LARGE_BYTE_SIZE = 135_579_135
 
@@ -57,27 +57,27 @@ suite "largestr":
       for i in 0..<len(result):
         result[i] = refChar[i mod refChar.len]
 
-  test "toByteArray":
+  test "toByteSeq":
     var buf = initLargeString()
-    time_it("toByteArray"):
-      var byteseq = toByteArray(buf)
+    time_it("toByteSeq"):
+      var byteseq = toByteSeq(buf)
       byteseq[0] = 65
       byteseq[1344] = 66
     check buf.len == 0
 
-  test "asByteArray":
+  test "asByteSeq":
     var largestr = initLargeString()
-    time_it("asByteArray"):
-      largestr.asByteArray:
+    time_it("asByteSeq"):
+      largestr.asByteSeq:
         data[0] = 65
         data[1344] = 66
     check largestr[0] == 'A'
     check largestr[1344] == 'B'
 
-  test "asByteArray(immutable)":
+  test "asByteSeq(immutable)":
     let largestr = initLargeString()
-    time_it("asByteArray (immutable)"):
-      largestr.asByteArray:
+    time_it("asByteSeq (immutable)"):
+      largestr.asByteSeq:
         check data.len == LARGE_BYTE_SIZE
 
 

@@ -4,7 +4,7 @@ discard """
 """
 import unittest
 import sequtils
-import byteutils
+import bytesequtils
 
 suite "Mutable":
   test "toString ":
@@ -15,12 +15,12 @@ suite "Mutable":
     check str.len == origlen
     check localbuf.len == 0
 
-  test "toByteArray":
+  test "toByteSeq":
     var localstr = "azerty"
     let origlen = localstr.len
     check localstr == "azerty"
     ## You cannot use localstr after this point
-    var buf = toByteArray(localstr)
+    var buf = toByteSeq(localstr)
     check buf == mapLiterals(@[97, 122, 101, 114, 116, 121], uint8)
     buf[0] = 65
     check buf == mapLiterals(@[65, 122, 101, 114, 116, 121], uint8)
@@ -39,10 +39,10 @@ suite "Mutable":
     check localbuf[0] == 97
     check localbuf[1] == 98
 
-  test "asByteArray":
+  test "asByteSeq":
     var localstr = "abcdefghijklm"
     let origlen = localstr.len
-    localstr.asByteArray:
+    localstr.asByteSeq:
       check data == mapLiterals((97..109).toSeq, uint8)
       data[0] = 65 # uint8 value of ASCII char 'A'
       data[1] = 66 # uint8 value of ASCII char 'B'
