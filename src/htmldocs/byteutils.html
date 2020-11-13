@@ -176,8 +176,9 @@ Move memory from a mutable <tt class="docutils literal"><span class="pre">string
 Inject a mutable string <tt class="docutils literal"><span class="pre">data</span></tt> containing seq[byte] <tt class="docutils literal"><span class="pre">buf</span></tt>
 <p><strong class="examples_text">Example:</strong></p>
 <pre class="listing"><span class="Keyword">import</span><span class="Whitespace"> </span><span class="Identifier">sequtils</span><span class="Whitespace">
-</span><span class="Keyword">var</span><span class="Whitespace"> </span><span class="Identifier">myByteseq</span><span class="Punctuation">:</span><span class="Whitespace"> </span><span class="Identifier">seq</span><span class="Punctuation">[</span><span class="Identifier">byte</span><span class="Punctuation">]</span><span class="Whitespace"> </span><span class="Operator">=</span><span class="Whitespace"> </span><span class="Identifier">mapLiterals</span><span class="Punctuation">(</span><span class="Punctuation">(</span><span class="FloatNumber">48.</span><span class="Operator">.</span><span class="DecNumber">57</span><span class="Punctuation">)</span><span class="Operator">.</span><span class="Identifier">toSeq</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="Identifier">uint8</span><span class="Punctuation">)</span><span class="Whitespace">
-</span><span class="Identifier">myByteseq</span><span class="Operator">.</span><span class="Identifier">asString</span><span class="Punctuation">:</span><span class="Whitespace">
+</span><span class="Keyword">var</span><span class="Whitespace"> </span><span class="Identifier">bytesBuffer</span><span class="Punctuation">:</span><span class="Whitespace"> </span><span class="Identifier">seq</span><span class="Punctuation">[</span><span class="Identifier">byte</span><span class="Punctuation">]</span><span class="Whitespace"> </span><span class="Operator">=</span><span class="Whitespace"> </span><span class="Identifier">mapLiterals</span><span class="Punctuation">(</span><span class="Punctuation">(</span><span class="FloatNumber">48.</span><span class="Operator">.</span><span class="DecNumber">57</span><span class="Punctuation">)</span><span class="Operator">.</span><span class="Identifier">toSeq</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="Identifier">uint8</span><span class="Punctuation">)</span><span class="Whitespace">
+</span><span class="Identifier">bytesBuffer</span><span class="Operator">.</span><span class="Identifier">asString</span><span class="Punctuation">:</span><span class="Whitespace">
+  </span><span class="Comment"># ASCII representation of the bytes stored in bytesBuffer</span><span class="Whitespace">
   </span><span class="Identifier">doAssert</span><span class="Whitespace"> </span><span class="Identifier">data</span><span class="Whitespace"> </span><span class="Operator">==</span><span class="Whitespace"> </span><span class="StringLit">&quot;0123456789&quot;</span></pre>
 
 </dd>
@@ -185,7 +186,7 @@ Inject a mutable string <tt class="docutils literal"><span class="pre">data</spa
 <dt><pre><span class="Keyword">template</span> <a href="#asString.t%2Cseq%5Bbyte%5D%2C_2"><span class="Identifier">asString</span></a><span class="Other">(</span><span class="Identifier">bytes</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">byte</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">body</span><span class="Other">)</span></pre></dt>
 <dd>
 
-<tt class="docutils literal"><span class="pre">asString</span></tt> immutable version.
+<tt class="docutils literal"><span class="pre">asString</span></tt> immutable <tt class="docutils literal"><span class="pre">template</span></tt> that uses <tt class="docutils literal"><span class="pre">copyMem</span></tt> instead of <tt class="docutils literal"><span class="pre">move</span></tt>. It is slower, but doesn't break immutability. 
 
 </dd>
 <a id="asByteArray.t,string,"></a>
@@ -195,8 +196,9 @@ Inject a mutable string <tt class="docutils literal"><span class="pre">data</spa
 Inject a mutable seq[byte] <tt class="docutils literal"><span class="pre">data</span></tt> containing the string <tt class="docutils literal"><span class="pre">buf</span></tt>
 <p><strong class="examples_text">Example:</strong></p>
 <pre class="listing"><span class="Keyword">import</span><span class="Whitespace"> </span><span class="Identifier">sequtils</span><span class="Whitespace">
-</span><span class="Keyword">var</span><span class="Whitespace"> </span><span class="Identifier">localstr</span><span class="Whitespace"> </span><span class="Operator">=</span><span class="Whitespace"> </span><span class="StringLit">&quot;abcdefghijklm&quot;</span><span class="Whitespace">
-</span><span class="Identifier">localstr</span><span class="Operator">.</span><span class="Identifier">asByteArray</span><span class="Punctuation">:</span><span class="Whitespace">
+</span><span class="Keyword">var</span><span class="Whitespace"> </span><span class="Identifier">strBuffer</span><span class="Whitespace"> </span><span class="Operator">=</span><span class="Whitespace"> </span><span class="StringLit">&quot;abcdefghijklm&quot;</span><span class="Whitespace">
+</span><span class="Identifier">strBuffer</span><span class="Operator">.</span><span class="Identifier">asByteArray</span><span class="Punctuation">:</span><span class="Whitespace">
+  </span><span class="Comment"># ASCII value of the characters stored in strBuffer</span><span class="Whitespace">
   </span><span class="Identifier">doAssert</span><span class="Whitespace"> </span><span class="Identifier">data</span><span class="Whitespace"> </span><span class="Operator">==</span><span class="Whitespace"> </span><span class="Identifier">mapLiterals</span><span class="Punctuation">(</span><span class="Punctuation">(</span><span class="FloatNumber">97.</span><span class="Operator">.</span><span class="DecNumber">109</span><span class="Punctuation">)</span><span class="Operator">.</span><span class="Identifier">toSeq</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="Identifier">uint8</span><span class="Punctuation">)</span></pre>
 
 </dd>
@@ -204,7 +206,7 @@ Inject a mutable seq[byte] <tt class="docutils literal"><span class="pre">data</
 <dt><pre><span class="Keyword">template</span> <a href="#asByteArray.t%2Cstring%2C_2"><span class="Identifier">asByteArray</span></a><span class="Other">(</span><span class="Identifier">str</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">body</span><span class="Other">)</span></pre></dt>
 <dd>
 
-<tt class="docutils literal"><span class="pre">asByteArray</span></tt> immutable version.
+<tt class="docutils literal"><span class="pre">asByteArray</span></tt> immutable <tt class="docutils literal"><span class="pre">template</span></tt> that uses <tt class="docutils literal"><span class="pre">copyMem</span></tt> instead of <tt class="docutils literal"><span class="pre">move</span></tt>. It is slower, but doesn't break immutability. 
 
 </dd>
 
@@ -217,7 +219,7 @@ Inject a mutable seq[byte] <tt class="docutils literal"><span class="pre">data</
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2020-11-13 13:47:17 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2020-11-13 14:10:44 UTC</small>
       </div>
     </div>
   </div>

@@ -28,16 +28,16 @@ suite "Mutable":
     check localstr.len == 0
 
   test "asString":
-    var myByteSeq: seq[byte] = mapLiterals((48..57).toSeq, uint8)
-    let origlen = myByteSeq.len
-    myByteSeq.asString:
+    var localbuf: seq[byte] = mapLiterals((48..57).toSeq, uint8)
+    let origlen = localbuf.len
+    localbuf.asString:
       check data == "0123456789"
       data[0] = 'a'
       data[1] = 'b'
       check data.len == origlen
 
-    check myByteSeq[0] == 97
-    check myByteSeq[1] == 98
+    check localbuf[0] == 97
+    check localbuf[1] == 98
 
   test "asByteArray":
     var localstr = "abcdefghijklm"

@@ -74,8 +74,9 @@ template asString*(bytes: var seq[byte], body) =
   ## Inject a mutable string ``data`` containing seq[byte] ``buf``
   runnableExamples:
     import sequtils
-    var myByteseq: seq[byte] = mapLiterals((48..57).toSeq, uint8)
-    myByteseq.asString:
+    var bytesBuffer: seq[byte] = mapLiterals((48..57).toSeq, uint8)
+    bytesBuffer.asString:
+      # ASCII representation of the bytes stored in bytesBuffer
       doAssert data == "0123456789"
 
   block:
@@ -85,7 +86,10 @@ template asString*(bytes: var seq[byte], body) =
 
 # This template is tolerated on immutable because it does not break immutability
 template asString*(bytes: seq[byte], body) =
-  ## ``asString`` immutable version.
+  ##[
+    ``asString`` immutable ``template`` that uses ``copyMem`` instead of ``move``.
+    It is slower, but doesn't break immutability.
+  ]##
   block:
     let data {.inject.} = toString(bytes)
     body
@@ -94,8 +98,9 @@ template asByteArray*(str: var string, body) =
   ## Inject a mutable seq[byte] ``data`` containing the string ``buf``
   runnableExamples:
     import sequtils
-    var localstr = "abcdefghijklm"
-    localstr.asByteArray:
+    var strBuffer = "abcdefghijklm"
+    strBuffer.asByteArray:
+      # ASCII value of the characters stored in strBuffer
       doAssert data == mapLiterals((97..109).toSeq, uint8)
 
   block:
@@ -105,7 +110,10 @@ template asByteArray*(str: var string, body) =
 
 # This template is tolerated on immutable because it does not break immutability
 template asByteArray*(str: string, body) =
-  ## ``asByteArray`` immutable version.
+  ##[
+    ``asByteArray`` immutable ``template`` that uses ``copyMem`` instead of ``move``.
+    It is slower, but doesn't break immutability.
+  ]##
   block:
     let data {.inject.} = toByteArray(str)
     body

@@ -8,12 +8,12 @@ import byteutils
 
 suite "Immutable":
   test "asString":
-    let myByteSeq: seq[byte] = mapLiterals((48..57).toSeq, uint8)
-    let origlen = myByteSeq.len
-    myByteSeq.asString:
+    let localbuf: seq[byte] = mapLiterals((48..57).toSeq, uint8)
+    let origlen = localbuf.len
+    localbuf.asString:
       check data == "0123456789"
       check data.len == origlen
-    check myByteSeq == mapLiterals((48..57).toSeq, uint8)
+    check localbuf == mapLiterals((48..57).toSeq, uint8)
 
   test "asByteArray":
     let localstr = "abcdefghijklm"

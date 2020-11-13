@@ -3,7 +3,6 @@ discard """
   exitcode: 0
 """
 import unittest
-import sequtils
 import byteutils
 
 suite "Empty":
