@@ -3,7 +3,7 @@ discard """
 """
 import unittest
 import sequtils
-import byteutils
+import bytesequtils
 
 suite "Rejected":
   test "toString":
@@ -15,10 +15,10 @@ suite "Rejected":
     else:
       skip()
 
-  test "toByteArray":
+  test "toByteSeq":
     when defined(testing):
       let localstr = "azerty"
-      var buf = toByteArray(localstr)
+      var buf = toByteSeq(localstr)
       check buf == mapLiterals(@[97, 122, 101, 114, 116, 121], uint8)
       buf[0] = 65
       check buf == mapLiterals(@[65, 122, 101, 114, 116, 121], uint8)
