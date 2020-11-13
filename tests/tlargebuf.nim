@@ -11,43 +11,12 @@ import byteutils
 
 const LARGE_BYTE_SIZE = 135_579_135
 
-template time_it(name:string, body)=
+template time_it(name: string, body) =
   let t0 = epochTime()
   body
   let elapsed: float32 = (epochTime() - t0)*1000
   let elapsedStr = elapsed.formatFloat(format = ffDecimal, precision = 6)
   echo("  ", name, "> CPU Time=", elapsedStr, "ms")
-
-suite "largestr":
-  proc initLargeString(): string =
-    result = newString(LARGE_BYTE_SIZE)
-    block:
-      let refChar = @['a', 'b', 'c', 'd', 'e']
-      for i in 0..<len(result):
-        result[i] = refChar[i mod refChar.len]
-
-  test "toByteSeq":
-    var buf = initLargeString()
-    time_it("toByteSeq"):
-      var byteseq = toByteSeq(buf)
-      byteseq[0] = 65
-      byteseq[1344] = 66
-    check buf.len == 0
-
-  test "asByteSeq":
-    var largestr = initLargeString()
-    time_it("asByteSeq"):
-      largestr.asByteSeq:
-        data[0] = 65
-        data[1344] = 66
-    check largestr[0] == 'A'
-    check largestr[1344] == 'B'
-
-  test "asByteSeq(immutable)":
-    let largestr = initLargeString()
-    time_it("asByteSeq"):
-      largestr.asByteSeq:
-        check data.len == LARGE_BYTE_SIZE
 
 suite "largeseq":
   proc initLargeSeq(): seq[byte] =
@@ -78,6 +47,37 @@ suite "largeseq":
     let largeseq = initLargeSeq()
     time_it("asString"):
       largeseq.asString:
+        check data.len == LARGE_BYTE_SIZE
+
+suite "largestr":
+  proc initLargeString(): string =
+    result = newString(LARGE_BYTE_SIZE)
+    block:
+      let refChar = @['a', 'b', 'c', 'd', 'e']
+      for i in 0..<len(result):
+        result[i] = refChar[i mod refChar.len]
+
+  test "toByteArray":
+    var buf = initLargeString()
+    time_it("toByteArray"):
+      var byteseq = toByteArray(buf)
+      byteseq[0] = 65
+      byteseq[1344] = 66
+    check buf.len == 0
+
+  test "asByteArray":
+    var largestr = initLargeString()
+    time_it("asByteArray"):
+      largestr.asByteArray:
+        data[0] = 65
+        data[1344] = 66
+    check largestr[0] == 'A'
+    check largestr[1344] == 'B'
+
+  test "asByteArray(immutable)":
+    let largestr = initLargeString()
+    time_it("asByteArray"):
+      largestr.asByteArray:
         check data.len == LARGE_BYTE_SIZE
 
 

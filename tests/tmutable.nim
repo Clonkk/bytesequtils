@@ -9,39 +9,45 @@ import byteutils
 suite "Mutable":
   test "toString ":
     var localbuf = mapLiterals(@[66, 111, 98, 64, 109, 97, 105, 108, 46, 99, 111, 109], uint8)
+    let origlen = localbuf.len
     var str = toString(localbuf)
     check str == "Bob@mail.com"
+    check str.len == origlen
     check localbuf.len == 0
 
-  test "toByteSeq":
+  test "toByteArray":
     var localstr = "azerty"
+    let origlen = localstr.len
     check localstr == "azerty"
     ## You cannot use localstr after this point
-    var buf = toByteSeq(localstr)
+    var buf = toByteArray(localstr)
     check buf == mapLiterals(@[97, 122, 101, 114, 116, 121], uint8)
     buf[0] = 65
     check buf == mapLiterals(@[65, 122, 101, 114, 116, 121], uint8)
-
-    # localstr has been moved
-    check localstr == ""
+    check buf.len == origlen
+    check localstr.len == 0
 
   test "asString":
     var myByteSeq: seq[byte] = mapLiterals((48..57).toSeq, uint8)
+    let origlen = myByteSeq.len
     myByteSeq.asString:
       check data == "0123456789"
       data[0] = 'a'
       data[1] = 'b'
+      check data.len == origlen
 
     check myByteSeq[0] == 97
     check myByteSeq[1] == 98
 
-  test "asByteSeq":
+  test "asByteArray":
     var localstr = "abcdefghijklm"
-    localstr.asByteSeq:
+    let origlen = localstr.len
+    localstr.asByteArray:
       check data == mapLiterals((97..109).toSeq, uint8)
       data[0] = 65 # uint8 value of ASCII char 'A'
       data[1] = 66 # uint8 value of ASCII char 'B'
+      check data.len == origlen
+
     check localstr[0] == 'A'
     check localstr[1] == 'B'
-
 

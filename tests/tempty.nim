@@ -13,21 +13,21 @@ suite "Empty":
     localbuf.asString:
       check data == ""
 
-  test "asByteSeq":
+  test "asByteArray":
     var localstr: string
     check localstr == ""
-    localstr.asByteSeq:
+    localstr.asByteArray:
       check data == newSeqUninitialized[uint8](0)
 
   test "toString ":
-    var localbuf : seq[byte]
+    var localbuf: seq[byte]
     check localbuf == newSeqUninitialized[uint8](0)
     var str = toString(localbuf)
     check str == ""
 
-  test "toByteSeq":
-    var localstr : string
+  test "toByteArray":
+    var localstr: string
     check localstr == ""
-    var buf = toByteSeq(localstr)
-    check buf ==  newSeqUninitialized[uint8](0)
+    var buf = toByteArray(localstr)
+    check buf == newSeqUninitialized[uint8](0)
 

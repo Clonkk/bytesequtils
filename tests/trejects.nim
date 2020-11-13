@@ -15,10 +15,10 @@ suite "Rejected":
     else:
       skip()
 
-  test "toByteSeq":
+  test "toByteArray":
     when defined(testing):
       let localstr = "azerty"
-      var buf = toByteSeq(localstr)
+      var buf = toByteArray(localstr)
       check buf == mapLiterals(@[97, 122, 101, 114, 116, 121], uint8)
       buf[0] = 65
       check buf == mapLiterals(@[65, 122, 101, 114, 116, 121], uint8)
