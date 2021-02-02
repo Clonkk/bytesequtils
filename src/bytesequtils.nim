@@ -21,10 +21,11 @@
 #   # echo result.repr
 
 ## A collections of ``template`` and ``proc`` to work with binary data stored in either ``string`` or ``seq[byte]`` buffer.
+## Converting a seq[byte] into a string do not append a `'\\0'`. Be careful when interacting with `cstring` or C-API.
 
 # Immutable version can only works with copy
 # Using move here would break immutability for asStrBuf / asByteSeq
-# Don't export conversion as it copy data => User would end up with 2 different buffer and it's not the goal
+# Don't export immutable conversion as it copy data => User would end up with 2 different buffer and it's not the goal
 func toByteSeq(str: string): seq[byte] {.inline.} =
   ## Copy ``string`` memory into an immutable``seq[byte]``.
   let length = str.len
@@ -32,16 +33,33 @@ func toByteSeq(str: string): seq[byte] {.inline.} =
     result = newSeq[byte](length)
     copyMem(result[0].unsafeAddr, str.cstring, length)
 
+proc toByteSeq*(str: var string): seq[byte] {.inline.} =
+  ## Move memory from a mutable ``string`` into a ``seq[byte]``.
+  runnableExamples:
+      # Create a buffer
+      let buf_size = 10*1024
+      var strbuf = newString(buf_size)
+      # insert data into buffer
+      # Move data from the buffer into a string
+      var buffer = strbuf.toByteSeq
+      doAssert strbuf.len == 0
+      doAssert buffer.len == 10*1024
+
+  if str.len > 0:
+    result = move(cast[ptr seq[byte]](str.addr)[])
+
 func toStrBuf(bytes: seq[byte]): string {.inline.} =
   ## Copy ``seq[byte]`` memory into an immutable ``string``.
+  ## Do not handle null termination. Manually add `'\\0'` if you need to use cstring.
   let length = bytes.len
   if length > 0:
     result = newString(length)
-    copyMem(result.cstring, bytes[0].unsafeAddr, length)
+    copyMem(result[0].unsafeAddr, bytes[0].unsafeAddr, length)
 
-# Mutable version
+# Mutable version don't deal properly with null termination
 proc toStrBuf*(bytes: var seq[byte]): string {.inline.} =
   ## Move memory from a mutable``seq[byte]`` into a ``string``
+  ## Do not handle null termination. Manually add `'\0'` if you need to use cstring.
   runnableExamples:
     # Create a buffer
     let buf_size = 10*1024
@@ -54,21 +72,6 @@ proc toStrBuf*(bytes: var seq[byte]): string {.inline.} =
 
   if bytes.len > 0:
     result = move(cast[ptr string](bytes.addr)[])
-
-proc toByteSeq*(str: var string): seq[byte] {.inline.} =
-  ## Move memory from a mutable ``string`` into a ``seq[byte]``
-  runnableExamples:
-    # Create a buffer
-    let buf_size = 10*1024
-    var strbuf = newString(buf_size)
-    # insert data into buffer
-    # Move data from the buffer into a string
-    var buffer = strbuf.toByteSeq
-    doAssert strbuf.len == 0
-    doAssert buffer.len == 10*1024
-
-  if str.len > 0:
-    result = move(cast[ptr seq[byte]](str.addr)[])
 
 template asStrBuf*(bytes: var seq[byte], body) =
   ## Inject a mutable string ``data`` containing seq[byte] ``buf``

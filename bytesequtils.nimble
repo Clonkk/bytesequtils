@@ -1,6 +1,6 @@
 # Package
 
-version       = "1.1.1"
+version       = "1.1.2"
 author        = "rcaillaud"
 description   = "Nim package to manipulate buffer as either seq[byte] or string"
 license       = "MIT"
@@ -10,3 +10,5 @@ srcDir        = "src"
 # Dependencies
 
 requires "nim >= 1.4.0"
+task gendoc, "gen doc":
+  exec("nimble doc --project src/bytesequtils.nim --out:docs/")

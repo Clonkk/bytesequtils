@@ -1,5 +1,5 @@
-toStrBuf	bytesequtils.html#toStrBuf,seq[byte]	bytesequtils: toStrBuf(bytes: var seq[byte]): string	
 toByteSeq	bytesequtils.html#toByteSeq,string	bytesequtils: toByteSeq(str: var string): seq[byte]	
+toStrBuf	bytesequtils.html#toStrBuf,seq[byte]	bytesequtils: toStrBuf(bytes: var seq[byte]): string	
 asStrBuf	bytesequtils.html#asStrBuf.t,seq[byte],	bytesequtils: asStrBuf(bytes: var seq[byte]; body)	
 asStrBuf	bytesequtils.html#asStrBuf.t,seq[byte],_2	bytesequtils: asStrBuf(bytes: seq[byte]; body)	
 asByteSeq	bytesequtils.html#asByteSeq.t,string,	bytesequtils: asByteSeq(str: var string; body)	
