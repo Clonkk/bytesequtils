@@ -2,7 +2,7 @@
 
 A collections of ``template`` and ``proc`` to make it easier to work with buffer storing data in either ``string`` or ``seq[byte]``
 
-Note that it **doesn't** support ``openArray[byte]``. Conversion to ``string`` do not append `'\\0'` therefore using it for as ``cstring`` or with C-API is **unsafe**.
+Note that it **doesn't** support ``openArray[byte]``. Conversion to ``string`` do not append `'\0'` therefore using it for as ``cstring`` or with C-API is **unsafe**.
 
 ## Installation
 
