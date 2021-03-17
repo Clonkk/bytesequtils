@@ -1,6 +1,6 @@
 # Package
 
-version       = "1.1.2"
+version       = "1.1.3"
 author        = "rcaillaud"
 description   = "Nim package to manipulate buffer as either seq[byte] or string"
 license       = "MIT"
