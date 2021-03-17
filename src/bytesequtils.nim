@@ -31,7 +31,7 @@ func toByteSeq(str: string): seq[byte] {.inline.} =
   let length = str.len
   if length > 0:
     result = newSeq[byte](length)
-    copyMem(result[0].unsafeAddr, str.cstring, length)
+    copyMem(result[0].unsafeAddr, str[0].unsafeAddr, length)
 
 proc toByteSeq*(str: var string): seq[byte] {.inline.} =
   ## Move memory from a mutable ``string`` into a ``seq[byte]``.
