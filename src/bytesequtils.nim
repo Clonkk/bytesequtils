@@ -46,6 +46,7 @@ proc toByteSeq*(str: var string): seq[byte] {.inline.} =
       doAssert buffer.len == 10*1024
 
   if str.len > 0:
+    str.prepareMutation()
     result = move(cast[ptr seq[byte]](str.addr)[])
 
 func toStrBuf(bytes: seq[byte]): string {.inline.} =
